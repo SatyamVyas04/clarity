@@ -10,7 +10,9 @@ import {
   Zap,
 } from "lucide-react";
 import Link from "next/link";
-import Dither from "@/components/sections/dither";
+import CountUp from "@/components/bits/CountUp";
+// import Dither from "@/components/bits/dither";
+import GlareHover from "@/components/bits/GlareHover";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,7 +36,7 @@ export default function Home() {
       icon: <Shield className="h-5 w-5" />,
       title: "Automated Verification",
       description:
-        "Cross-references news stories to detect credibility and filter misinformation in seconds.",
+        "Cross-references news stories to detect credibility and filter misinformation quickly.",
     },
     {
       icon: <Brain className="h-5 w-5" />,
@@ -58,7 +60,7 @@ export default function Home() {
       icon: <CheckCircle2 className="h-5 w-5" />,
       title: "Bias Detection",
       description:
-        "AI-powered political bias analysis reveals media perspective and helps form balanced opinions.",
+        "AI-powered political bias analysis reveals media view and helps form balanced opinions.",
     },
   ];
 
@@ -80,27 +82,6 @@ export default function Home() {
     },
   ];
 
-  const architectureHighlights = [
-    {
-      title: "~2 seconds",
-      subtitle: "Real-time Processing",
-      description:
-        "Lightning-fast hoax news detection. News aggregation, credibility verification, and bias analysis all happen in parallel.",
-    },
-    {
-      title: "5 tech layers",
-      subtitle: "Core Stack",
-      description:
-        "Integrated architecture spanning frontend, backend, AI/ML, APIs, and databases with Next.js, Node.js, and more.",
-    },
-    {
-      title: "3 LLM integrations",
-      subtitle: "AI Models",
-      description:
-        "Multi-model approach for news aggregation, bias detection, and summarization including Perplexity and Gemini.",
-    },
-  ];
-
   const pricingPlans = [
     {
       name: "Free",
@@ -112,6 +93,7 @@ export default function Home() {
         "Bias indicators",
         "Up to 50 stories/day",
         "Basic summaries",
+        "Community support",
       ],
       isPrimary: false,
     },
@@ -135,7 +117,7 @@ export default function Home() {
     <main className="min-h-screen bg-background text-foreground">
       <section className="relative flex h-screen flex-col overflow-hidden border-border border-b bg-transparent">
         {/* Overlay */}
-        <div className="absolute inset-0 z-0 opacity-50 invert-100 dark:invert-0">
+        {/* <div className="absolute inset-0 z-0 opacity-50 invert-100 dark:invert-0">
           <Dither
             colorNum={5}
             disableAnimation={false}
@@ -146,10 +128,10 @@ export default function Home() {
             waveFrequency={2}
             waveSpeed={0.05}
           />
-        </div>
+        </div> */}
 
         {/* Header */}
-        <header className="sticky top-4 z-50 mx-auto w-fit min-w-sm rounded-full border-border border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60 md:min-w-2xl lg:min-w-3xl xl:min-w-4xl">
+        <header className="sticky top-4 z-50 mx-auto w-fit min-w-sm rounded-full border border-border bg-card/95 backdrop-blur supports-backdrop-filter:bg-card/60 md:min-w-2xl lg:min-w-3xl xl:min-w-4xl">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between py-4">
               <Link className="flex items-center gap-2" href="/">
@@ -200,11 +182,21 @@ export default function Home() {
       </section>
 
       {/* Stats */}
-      <section className="border-border border-b bg-muted/50">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+      <section className="border-border border-b bg-muted/50 text-center">
+        <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
             <div className="space-y-3">
-              <p className="font-bold text-3xl text-primary sm:text-4xl">86%</p>
+              <p className="font-bold text-3xl text-primary sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
+                <CountUp
+                  className="count-up-text"
+                  direction="up"
+                  duration={1}
+                  from={0}
+                  separator=","
+                  to={86}
+                />
+                %
+              </p>
               <p className="text-muted-foreground">
                 of internet users have encountered misinformation online,
                 leading to widespread confusion and reduced trust in legitimate
@@ -212,10 +204,20 @@ export default function Home() {
               </p>
             </div>
             <div className="space-y-3">
-              <p className="font-bold text-3xl text-primary sm:text-4xl">64%</p>
+              <p className="font-bold text-3xl text-primary sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
+                <CountUp
+                  className="count-up-text"
+                  direction="up"
+                  duration={1}
+                  from={0}
+                  separator=","
+                  to={64}
+                />
+                %
+              </p>
               <p className="text-muted-foreground">
                 of people struggle to differentiate between verified news and
-                false information during major global events.
+                false information and misinformation during major global events.
               </p>
             </div>
           </div>
@@ -236,19 +238,33 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {features.map((feature, idx) => (
-                <Card key={idx}>
-                  <CardHeader>
-                    <div className="mb-2 flex h-10 w-10 items-center justify-center rounded bg-linear-to-br from-primary to-primary/80 text-primary-foreground">
-                      {feature.icon}
-                    </div>
-                    <CardTitle className="text-lg">{feature.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground text-sm">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
+                <GlareHover
+                  borderRadius="0px"
+                  className="m-0 border-none p-0"
+                  glareAngle={-30}
+                  glareColor="#ffffff"
+                  glareOpacity={0.3}
+                  glareSize={300}
+                  height="full"
+                  key={idx}
+                  playOnce={false}
+                  transitionDuration={800}
+                  width="full"
+                >
+                  <Card className="h-full w-full">
+                    <CardHeader>
+                      <div className="mb-2 flex h-10 w-10 items-center justify-center rounded bg-linear-to-br from-primary to-primary/25 text-primary-foreground">
+                        {feature.icon}
+                      </div>
+                      <CardTitle className="text-lg">{feature.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground text-sm">
+                        {feature.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </GlareHover>
               ))}
             </div>
           </div>
@@ -269,43 +285,22 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
               {advancedFeatures.map((feat, idx) => (
-                <div className="space-y-3" key={idx}>
-                  <h3 className="font-semibold text-lg">{feat.title}</h3>
-                  <p className="text-muted-foreground text-sm">
+                <div
+                  className="group relative p-4 outline outline-transparent hover:outline-border"
+                  key={idx}
+                >
+                  <div className="absolute top-0 left-0 h-3 w-3 border-transparent border-t border-l transition-all group-hover:border-foreground" />
+                  <div className="absolute top-0 right-0 h-3 w-3 border-transparent border-t border-r transition-all group-hover:border-foreground" />
+                  <div className="absolute bottom-0 left-0 h-3 w-3 border-transparent border-b border-l transition-all group-hover:border-foreground" />
+                  <div className="absolute right-0 bottom-0 h-3 w-3 border-transparent border-r border-b transition-all group-hover:border-foreground" />
+
+                  <h3 className="font-semibold text-lg xl:text-xl">
+                    {feat.title}
+                  </h3>
+                  <p className="mt-2 text-muted-foreground text-sm">
                     {feat.description}
                   </p>
                 </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Architecture */}
-      <section className="border-border border-b">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-          <div className="space-y-12">
-            <div className="space-y-2 text-center">
-              <h2 className="font-bold text-3xl sm:text-4xl">
-                Powerful system architecture
-              </h2>
-              <p className="text-muted-foreground">
-                Built for speed and accuracy
-              </p>
-            </div>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-              {architectureHighlights.map((highlight, idx) => (
-                <Card key={idx}>
-                  <CardHeader>
-                    <CardTitle>{highlight.title}</CardTitle>
-                    <CardDescription>{highlight.subtitle}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground text-sm">
-                      {highlight.description}
-                    </p>
-                  </CardContent>
-                </Card>
               ))}
             </div>
           </div>
@@ -368,7 +363,7 @@ export default function Home() {
 
       {/* Final CTA */}
       <section className="border-border border-b">
-        <div className="mx-auto max-w-lg space-y-6 px-4 py-16 text-center sm:px-6 sm:py-20 lg:px-8">
+        <div className="mx-auto max-w-lg space-y-6 px-4 py-16 text-center sm:px-6 sm:py-20 md:py-24 lg:px-8 lg:py-28 xl:py-32">
           <h2 className="font-bold text-3xl sm:text-4xl">
             Ready to bring clarity?
           </h2>
