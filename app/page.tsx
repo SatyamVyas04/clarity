@@ -3,15 +3,16 @@
 
 import {
   BookOpen,
-  Brain,
-  CheckCircle2,
+  Coins,
+  Gamepad2,
+  Rocket,
   Shield,
-  TrendingUp,
+  Trophy,
   Zap,
 } from "lucide-react";
 import Link from "next/link";
 import CountUp from "@/components/bits/CountUp";
-// import Dither from "@/components/bits/dither";
+import Dither from "@/components/bits/dither";
 import GlareHover from "@/components/bits/GlareHover";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,86 +29,85 @@ export default function Home() {
   const features = [
     {
       icon: <Zap className="h-5 w-5" />,
-      title: "Real-time Aggregation",
+      title: "Daily Alpha Drops",
       description:
-        "Gathers the latest global updates and trends from multiple trusted sources instantly.",
+        "Get the hottest Web3 news, DeFi trends, and NFT mints delivered instantly to your feed.",
+    },
+    {
+      icon: <Coins className="h-5 w-5" />,
+      title: "Read to Earn",
+      description:
+        "Don't just scroll. Complete articles, take a quick quiz, and earn $CLARITY tokens instantly.",
     },
     {
       icon: <Shield className="h-5 w-5" />,
-      title: "Automated Verification",
+      title: "Rug Pull Protection",
       description:
-        "Cross-references news stories to detect credibility and filter misinformation quickly.",
+        "Our community and AI verify projects so you can ape in safely without fear of scams.",
     },
     {
-      icon: <Brain className="h-5 w-5" />,
-      title: "Personalized Curation",
+      icon: <Gamepad2 className="h-5 w-5" />,
+      title: "Gamified Learning",
       description:
-        "Learns your preferences to recommend articles and topics aligned with your interests.",
+        "Level up your profile, earn badges, and compete on leaderboards by mastering crypto concepts.",
+    },
+    {
+      icon: <Rocket className="h-5 w-5" />,
+      title: "Launchpad Access",
+      description:
+        "Top learners get early whitelist access to vetted projects and exclusive airdrops.",
     },
     {
       icon: <BookOpen className="h-5 w-5" />,
-      title: "Smart Summaries",
+      title: "DAO Governance",
       description:
-        "AI-powered contextual briefs tailored for different audiences and expertise levels.",
-    },
-    {
-      icon: <TrendingUp className="h-5 w-5" />,
-      title: "Market Correlation",
-      description:
-        "Real-time tracking of how news events move markets and impact financial sectors.",
-    },
-    {
-      icon: <CheckCircle2 className="h-5 w-5" />,
-      title: "Bias Detection",
-      description:
-        "AI-powered political bias analysis reveals media view and helps form balanced opinions.",
+        "Use your earned tokens to vote on which news stories we cover and how the treasury is spent.",
     },
   ];
 
   const advancedFeatures = [
     {
-      title: "Smart Summaries",
+      title: "Quiz & Earn",
       description:
-        "Get the essence of complex stories in digestible formats. Our AI distills breaking news into clear, actionable insights for everyone.",
+        "Finish an article? Prove it. Answer 3 questions correctly to unlock the token reward for that post. It's that simple.",
     },
     {
-      title: "Bias Indicators",
+      title: "NFT Achievements",
       description:
-        "Transparency matters. Our bias indicator reveals whether articles lean left or right, helping you understand the perspective.",
+        "Mint exclusive soulbound tokens (SBTs) when you complete learning tracks like 'DeFi 101' or 'Layer 2 Scaling'.",
     },
     {
-      title: "Market Impact",
+      title: "Weekly Leaderboards",
       description:
-        "See how breaking news moves markets. Track stock impacts, sector trends, and investment implications instantly.",
+        "Compete against other readers. Top 100 users every week share a massive prize pool of stablecoins and partner tokens.",
     },
   ];
 
   const pricingPlans = [
     {
-      name: "Free",
+      name: "Explorer",
       price: "$0",
-      description: "Everything you need to stay informed.",
+      description: "Start your journey into Web3.",
       features: [
-        "Real-time news aggregation",
-        "Credibility badges & debunked alerts",
-        "Bias indicators",
-        "Up to 50 stories/day",
-        "Basic summaries",
-        "Community support",
+        "Access to daily news",
+        "Earn standard rewards",
+        "Basic quizzes",
+        "Community access",
+        "Create personal profile",
       ],
       isPrimary: false,
     },
     {
-      name: "Pro",
-      price: "$9.99",
-      description: "Advanced intelligence for power users.",
+      name: "Degen Mode",
+      price: "$19",
+      description: "Maximize your earning potential.",
       features: [
-        "Everything in Free",
-        "AI-powered summaries",
-        "Market correlations",
-        "Priority alerts",
-        "Unlimited stories",
-        "Bias scoring integration",
+        "2x Reward Multiplier",
+        "Exclusive Alpha channels",
+        "Priority Whitelist access",
+        "Ad-free experience",
+        "Premium NFT badge",
+        "Governance voting power",
       ],
       isPrimary: true,
     },
@@ -117,7 +117,7 @@ export default function Home() {
     <main className="min-h-screen bg-background text-foreground">
       <section className="relative flex h-screen flex-col overflow-hidden border-border border-b bg-transparent">
         {/* Overlay */}
-        {/* <div className="absolute inset-0 z-0 opacity-50 invert-100 dark:invert-0">
+        <div className="absolute inset-0 z-0 opacity-50 invert-100 dark:invert-0">
           <Dither
             colorNum={5}
             disableAnimation={false}
@@ -128,7 +128,7 @@ export default function Home() {
             waveFrequency={2}
             waveSpeed={0.05}
           />
-        </div> */}
+        </div>
 
         {/* Header */}
         <header className="sticky top-4 z-50 mx-auto w-fit min-w-sm rounded-full border border-border bg-card/95 backdrop-blur supports-backdrop-filter:bg-card/60 md:min-w-2xl lg:min-w-3xl xl:min-w-4xl">
@@ -145,10 +145,10 @@ export default function Home() {
                   size="sm"
                   variant="ghost"
                 >
-                  <Link href="/login">Log in</Link>
+                  <Link href="/login">Connect Wallet</Link>
                 </Button>
                 <Button asChild className="rounded-full" size="sm">
-                  <Link href="/signup">Sign up</Link>
+                  <Link href="/signup">Join Now</Link>
                 </Button>
               </div>
             </div>
@@ -159,22 +159,22 @@ export default function Home() {
         <div className="relative z-10 flex flex-1 items-center justify-center px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl space-y-6 text-center">
             <Badge className="mx-auto w-fit" variant="secondary">
-              Combat misinformation with AI
+              Read News. Take Quizzes. Earn Crypto.
             </Badge>
             <h1 className="text-balance font-bold text-5xl tracking-tight sm:text-6xl lg:text-7xl">
-              Verified intelligence during crisis
+              The Web3 News Portal That Pays You
             </h1>
             <p className="text-balance text-secondary-foreground text-sm sm:text-base">
-              Real-time fact-checking, transparent bias detection, and
-              actionable summaries. Clarity cuts through noise to deliver
-              trustworthy information when it matters most.
+              Stay ahead of the market with curated Web3 news. Verify your
+              knowledge with quick quizzes at the end of every article and stack
+              rewards instantly.
             </p>
             <div className="flex flex-col justify-center gap-3 pt-4 sm:flex-row">
               <Button asChild size="lg">
-                <Link href="/signup">Start free beta</Link>
+                <Link href="/signup">Start Earning</Link>
               </Button>
               <Button asChild size="lg" variant="secondary">
-                <Link href="#features">Learn more</Link>
+                <Link href="#features">How it works</Link>
               </Button>
             </div>
           </div>
@@ -187,20 +187,20 @@ export default function Home() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
             <div className="space-y-3">
               <p className="font-bold text-3xl text-primary sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
+                $
                 <CountUp
                   className="count-up-text"
                   direction="up"
                   duration={1}
                   from={0}
                   separator=","
-                  to={86}
+                  to={240}
                 />
-                %
+                k+
               </p>
               <p className="text-muted-foreground">
-                of internet users have encountered misinformation online,
-                leading to widespread confusion and reduced trust in legitimate
-                news sources.
+                Total rewards distributed to our community of readers this month
+                alone. Knowledge literally pays off.
               </p>
             </div>
             <div className="space-y-3">
@@ -211,13 +211,13 @@ export default function Home() {
                   duration={1}
                   from={0}
                   separator=","
-                  to={64}
+                  to={15}
                 />
-                %
+                k+
               </p>
               <p className="text-muted-foreground">
-                of people struggle to differentiate between verified news and
-                false information and misinformation during major global events.
+                Daily quizzes completed by users, proving that gamified
+                education is the future of Web3 adoption.
               </p>
             </div>
           </div>
@@ -230,10 +230,10 @@ export default function Home() {
           <div className="space-y-12">
             <div className="space-y-2 text-center">
               <h2 className="font-bold text-3xl sm:text-4xl">
-                Core capabilities
+                Level Up Your Portfolio
               </h2>
               <p className="text-muted-foreground">
-                Everything you need to stay informed and make better decisions
+                Everything you need to stay informed and earn while you learn
               </p>
             </div>
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -277,10 +277,10 @@ export default function Home() {
           <div className="space-y-12">
             <div className="space-y-2 text-center">
               <h2 className="font-bold text-3xl sm:text-4xl">
-                Advanced intelligence
+                The Reward Loop
               </h2>
               <p className="text-muted-foreground">
-                Powerful features for informed decision-making
+                How we turn your attention into assets
               </p>
             </div>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -294,7 +294,8 @@ export default function Home() {
                   <div className="absolute bottom-0 left-0 h-3 w-3 border-transparent border-b border-l transition-all group-hover:border-foreground" />
                   <div className="absolute right-0 bottom-0 h-3 w-3 border-transparent border-r border-b transition-all group-hover:border-foreground" />
 
-                  <h3 className="font-semibold text-lg xl:text-xl">
+                  <h3 className="flex items-center gap-2 font-semibold text-lg xl:text-xl">
+                    <Trophy className="h-5 w-5 text-primary" />
                     {feat.title}
                   </h3>
                   <p className="mt-2 text-muted-foreground text-sm">
@@ -312,9 +313,9 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
           <div className="space-y-12">
             <div className="space-y-2 text-center">
-              <h2 className="font-bold text-3xl sm:text-4xl">Simple pricing</h2>
+              <h2 className="font-bold text-3xl sm:text-4xl">Membership</h2>
               <p className="text-muted-foreground">
-                Choose the plan that fits your needs. Upgrade anytime.
+                Join for free or upgrade to boost your earning multiplier.
               </p>
             </div>
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
@@ -339,7 +340,7 @@ export default function Home() {
                     <ul className="space-y-2 text-sm">
                       {plan.features.map((feature, idx) => (
                         <li className="flex items-center gap-2" key={idx}>
-                          <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+                          <Coins className="h-4 w-4 shrink-0 text-primary" />
                           <span>{feature}</span>
                         </li>
                       ))}
@@ -350,7 +351,7 @@ export default function Home() {
                       variant={plan.isPrimary ? "default" : "outline"}
                     >
                       <Link href="/signup">
-                        {plan.isPrimary ? "Get Pro" : "Start free"}
+                        {plan.isPrimary ? "Go Degen" : "Start Free"}
                       </Link>
                     </Button>
                   </CardContent>
@@ -364,15 +365,13 @@ export default function Home() {
       {/* Final CTA */}
       <section className="border-border border-b">
         <div className="mx-auto max-w-lg space-y-6 px-4 py-16 text-center sm:px-6 sm:py-20 md:py-24 lg:px-8 lg:py-28 xl:py-32">
-          <h2 className="font-bold text-3xl sm:text-4xl">
-            Ready to bring clarity?
-          </h2>
+          <h2 className="font-bold text-3xl sm:text-4xl">WAGMI.</h2>
           <p className="text-muted-foreground">
-            Join thousands staying informed during crises. Get started free - no
-            credit card required.
+            Join thousands of learners earning crypto every day. Connect your
+            wallet and start your first quest now.
           </p>
           <Button asChild size="lg">
-            <Link href="/signup">Start your free trial</Link>
+            <Link href="/signup">Launch App</Link>
           </Button>
         </div>
       </section>
@@ -387,19 +386,19 @@ export default function Home() {
                 className="transition-colors hover:text-foreground"
                 href="#"
               >
-                Privacy
+                Whitepaper
               </Link>
               <Link
                 className="transition-colors hover:text-foreground"
                 href="#"
               >
-                Terms
+                Tokenomics
               </Link>
               <Link
                 className="transition-colors hover:text-foreground"
                 href="#"
               >
-                Contact
+                Discord
               </Link>
               <ModeToggle />
             </div>
