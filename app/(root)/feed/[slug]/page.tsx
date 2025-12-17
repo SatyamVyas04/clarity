@@ -165,8 +165,8 @@ function ArticleContent({ slug }: { slug: string }) {
   }
 
   return (
-    <main className="min-h-screen bg-background pb-32">
-      <div className="container mx-auto max-w-3xl p-6 md:p-10">
+    <main className="relative z-10 mx-auto h-screen w-full max-w-4xl overflow-scroll border bg-background pb-16">
+      <div className="container mx-auto p-6 md:p-10">
         <nav className="mb-8 flex items-center justify-between">
           <Button asChild size="sm" variant="ghost">
             <Link href="/feed">Back to Feed</Link>

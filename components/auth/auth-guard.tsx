@@ -43,7 +43,7 @@ export function AuthGuard({ children }: AuthGuardProps) {
   // Show redirect message only when disconnected
   if (status === "disconnected") {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="relative z-10 flex min-h-screen items-center justify-center bg-background">
         <Card className="w-full max-w-sm">
           <CardContent className="flex flex-col items-center gap-4 py-8">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-muted border-t-primary" />
