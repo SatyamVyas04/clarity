@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { type CryptoNewsArticle, fetchCryptoNews } from "@/lib/news";
+import { MAX_COINS_PER_QUIZ } from "@/lib/quiz";
 
 type ArticlePageProps = {
   params: Promise<{ slug: string }>;
@@ -34,6 +35,20 @@ type EnhancedArticle = {
     title: string;
     url: string;
   }>;
+  quiz: {
+    callToAction: string;
+    questions: Array<{
+      prompt: string;
+      options: {
+        A: string;
+        B: string;
+        C: string;
+        D: string;
+      };
+      correctOption: "A" | "B" | "C" | "D";
+      explanation?: string;
+    }>;
+  };
 };
 
 const INLINE_CITATION_PATTERN = /(\[\[(.*?)\]\])/g;
@@ -49,6 +64,9 @@ async function getEnhancedContent(
       title: article.title,
       description: article.description,
       source: article.source_name,
+      slug: article.article_id,
+      imageUrl: article.image_url,
+      sourceLink: article.link,
     }),
   });
 
@@ -130,7 +148,7 @@ function ArticleContent({ slug }: { slug: string }) {
 
   if (!article) {
     return (
-      <main className="min-h-screen bg-background pb-28">
+      <main className="relative z-10 mx-auto h-screen w-full max-w-4xl overflow-scroll border bg-background pb-16">
         <div className="container mx-auto p-6 md:p-10">
           <Card>
             <CardContent className="py-10 text-center">
@@ -315,6 +333,27 @@ function ArticleContent({ slug }: { slug: string }) {
                   </ol>
                 </CardContent>
               </Card>
+
+              {enhancedContent.quiz && (
+                <Card className="border border-primary bg-primary/10">
+                  <CardHeader>
+                    <CardTitle>Test Your Clarity</CardTitle>
+                    <CardDescription>
+                      {enhancedContent.quiz.callToAction}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <p className="text-muted-foreground text-sm md:max-w-xl">
+                      Wrap the briefing with a rapid quiz and stack up to{" "}
+                      {MAX_COINS_PER_QUIZ} coins onto your profile. Five
+                      questions, instant rewards.
+                    </p>
+                    <Button asChild className="cursor-pointer" size="lg">
+                      <Link href={`/quiz/${slug}`}>Earn Coins Now</Link>
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           )}
 

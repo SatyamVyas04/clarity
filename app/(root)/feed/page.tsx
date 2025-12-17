@@ -45,13 +45,13 @@ function FeedContent() {
   const shouldShowArticles = hasArticles && !isNewsLoading && !newsError;
 
   return (
-    <main className="min-h-screen bg-background pb-28">
-      <div className="container mx-auto flex flex-col gap-10 p-6 md:p-10">
-        <header className="my-12 space-y-2 text-center">
+    <main className="relative z-10 mx-auto h-screen w-full max-w-4xl overflow-scroll border bg-background pb-16">
+      <div className="container mx-auto flex max-w-4xl flex-col p-6 md:p-10">
+        <header className="mb-12 space-y-4">
           <h1 className="font-bold text-4xl md:text-5xl">The Feed</h1>
-          <p className="text-lg text-muted-foreground italic">
+          <p className="text-lg text-muted-foreground italic md:text-xl">
             &ldquo;The market is a device for transferring money from the
-            impatient to the patient.&rdquo;
+            impatient to the patient&rdquo;
           </p>
         </header>
 
@@ -85,7 +85,7 @@ function FeedContent() {
             <div className="grid gap-6 md:grid-cols-2">
               {(articles ?? []).slice(0, 10).map((article) => (
                 <Card
-                  className="flex h-full flex-col pt-0"
+                  className="flex h-full flex-col border-border pt-0"
                   key={article.article_id}
                 >
                   {article.image_url ? (
@@ -101,27 +101,33 @@ function FeedContent() {
                     <div className="h-44 w-full rounded-t-lg bg-muted" />
                   )}
                   <CardHeader>
-                    <CardTitle className="text-xl">{article.title}</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="line-clamp-2 text-xl">
+                      {article.title}
+                    </CardTitle>
+                    <CardDescription className="line-clamp-2">
                       {formatDescription(article.description)}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="mt-auto space-y-4">
-                    <div className="flex flex-wrap items-center gap-2 text-muted-foreground text-xs">
-                      {article.source_name && (
-                        <span>{article.source_name}</span>
-                      )}
-                      {article.pubDate && (
-                        <span>{formatDate(article.pubDate)}</span>
-                      )}
-                      {article.coin?.slice(0, 2).map((symbol) => (
-                        <span
-                          className="rounded-full bg-primary/10 px-2 py-0.5 text-primary"
-                          key={symbol}
-                        >
-                          #{symbol}
-                        </span>
-                      ))}
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-muted-foreground text-xs">
+                      <div>
+                        {article.source_name && (
+                          <span className="mr-1">{article.source_name}</span>
+                        )}
+                        {article.coin?.slice(0, 2).map((symbol) => (
+                          <span
+                            className="mr-1 rounded-full bg-primary/10 px-2 py-0.5 text-primary"
+                            key={symbol}
+                          >
+                            #{symbol}
+                          </span>
+                        ))}
+                      </div>
+                      <div>
+                        {article.pubDate && (
+                          <span>{formatDate(article.pubDate)}</span>
+                        )}
+                      </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Button asChild size="sm">
