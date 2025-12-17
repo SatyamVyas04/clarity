@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import type React from "react";
 import "./globals.css";
+import { cookieToWeb3AuthState } from "@web3auth/modal";
+import { headers } from "next/headers";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { Provider } from "@/components/web3/provider";
 import { cn } from "@/lib/utils";
 
 const geist = Geist({ subsets: ["latin"] });
@@ -44,7 +47,7 @@ export const metadata: Metadata = {
         media: "(prefers-color-scheme: dark)",
       },
       {
-        url: "/icon.svg",
+        url: "/icon.png",
         type: "image/svg+xml",
       },
     ],
@@ -52,11 +55,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const web3authInitialState = cookieToWeb3AuthState(headersList.get("cookie"));
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn("font-sans antialiased", geist.className)}>
@@ -66,7 +71,9 @@ export default function RootLayout({
           disableTransitionOnChange
           enableSystem
         >
-          {children}
+          <Provider web3authInitialState={web3authInitialState}>
+            {children}
+          </Provider>
         </ThemeProvider>
       </body>
     </html>

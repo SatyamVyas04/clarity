@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/suspicious/noArrayIndexKey: All ids are being used properly */
 "use client";
 
+import { useWeb3AuthConnect } from "@web3auth/modal/react";
 import {
   BookOpen,
   Coins,
@@ -11,6 +12,7 @@ import {
   Zap,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import CountUp from "@/components/bits/CountUp";
 import Dither from "@/components/bits/dither";
 import GlareHover from "@/components/bits/GlareHover";
@@ -25,7 +27,35 @@ import {
 } from "@/components/ui/card";
 import { ModeToggle } from "@/components/ui/mode-toggle";
 
-export default function Home() {
+export default function LandingPage() {
+  const { connect, isConnected, loading, error } = useWeb3AuthConnect();
+  const router = useRouter();
+
+  const handleConnect = async () => {
+    if (loading) {
+      return;
+    }
+    // If already connected, navigate to feed
+    if (isConnected) {
+      router.push("/feed");
+      return;
+    }
+    try {
+      await connect();
+      // After successful connection, navigate to feed
+      router.push("/feed");
+    } catch {
+      // Hook exposes connection errors via the error state rendered below.
+    }
+  };
+
+  let headerLabel = "Connect Wallet";
+  if (loading) {
+    headerLabel = "Connecting...";
+  } else if (isConnected) {
+    headerLabel = "Go to Feed";
+  }
+
   const features = [
     {
       icon: <Zap className="h-5 w-5" />,
@@ -107,7 +137,6 @@ export default function Home() {
         "Priority Whitelist access",
         "Ad-free experience",
         "Premium NFT badge",
-        "Governance voting power",
       ],
       isPrimary: true,
     },
@@ -140,15 +169,12 @@ export default function Home() {
 
               <div className="flex items-center gap-2">
                 <Button
-                  asChild
-                  className="rounded-full"
+                  className="cursor-pointer rounded-full"
+                  disabled={loading}
+                  onClick={handleConnect}
                   size="sm"
-                  variant="ghost"
                 >
-                  <Link href="/login">Connect Wallet</Link>
-                </Button>
-                <Button asChild className="rounded-full" size="sm">
-                  <Link href="/signup">Join Now</Link>
+                  {headerLabel}
                 </Button>
               </div>
             </div>
@@ -170,13 +196,20 @@ export default function Home() {
               rewards instantly.
             </p>
             <div className="flex flex-col justify-center gap-3 pt-4 sm:flex-row">
-              <Button asChild size="lg">
-                <Link href="/signup">Start Earning</Link>
+              <Button
+                className="cursor-pointer"
+                onClick={handleConnect}
+                size="lg"
+              >
+                {loading ? "Connecting..." : "Start Earning"}
               </Button>
               <Button asChild size="lg" variant="secondary">
                 <Link href="#features">How it works</Link>
               </Button>
             </div>
+            {error && error.message !== "User closed the modal" && (
+              <p className="text-destructive text-sm">{error.message}</p>
+            )}
           </div>
         </div>
       </section>
@@ -319,44 +352,47 @@ export default function Home() {
               </p>
             </div>
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-              {pricingPlans.map((plan) => (
-                <Card
-                  className={plan.isPrimary ? "border-2 border-primary" : ""}
-                  key={plan.name}
-                >
-                  <CardHeader>
-                    <CardTitle>{plan.name}</CardTitle>
-                    <CardDescription>{plan.description}</CardDescription>
-                    <div className="mt-4">
-                      <span className="font-bold text-4xl">{plan.price}</span>
-                      {plan.price !== "$0" && (
-                        <span className="text-muted-foreground text-sm">
-                          /month
-                        </span>
-                      )}
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <ul className="space-y-2 text-sm">
-                      {plan.features.map((feature, idx) => (
-                        <li className="flex items-center gap-2" key={idx}>
-                          <Coins className="h-4 w-4 shrink-0 text-primary" />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <Button
-                      asChild
-                      className="w-full"
-                      variant={plan.isPrimary ? "default" : "outline"}
-                    >
-                      <Link href="/signup">
-                        {plan.isPrimary ? "Go Degen" : "Start Free"}
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+              {pricingPlans.map((plan) => {
+                const defaultLabel = plan.isPrimary ? "Go Degen" : "Start Free";
+
+                return (
+                  <Card
+                    className={plan.isPrimary ? "border-2 border-primary" : ""}
+                    key={plan.name}
+                  >
+                    <CardHeader>
+                      <CardTitle>{plan.name}</CardTitle>
+                      <CardDescription>{plan.description}</CardDescription>
+                      <div className="mt-4">
+                        <span className="font-bold text-4xl">{plan.price}</span>
+                        {plan.price !== "$0" && (
+                          <span className="text-muted-foreground text-sm">
+                            /month
+                          </span>
+                        )}
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <ul className="space-y-2 text-sm">
+                        {plan.features.map((feature, idx) => (
+                          <li className="flex items-center gap-2" key={idx}>
+                            <Coins className="h-4 w-4 shrink-0 text-primary" />
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <Button
+                        className="w-full"
+                        disabled={loading}
+                        onClick={handleConnect}
+                        variant={plan.isPrimary ? "default" : "outline"}
+                      >
+                        {loading ? "Connecting..." : defaultLabel}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -370,8 +406,8 @@ export default function Home() {
             Join thousands of learners earning crypto every day. Connect your
             wallet and start your first quest now.
           </p>
-          <Button asChild size="lg">
-            <Link href="/signup">Launch App</Link>
+          <Button disabled={loading} onClick={handleConnect} size="lg">
+            {loading ? "Connecting..." : "Launch App"}
           </Button>
         </div>
       </section>
