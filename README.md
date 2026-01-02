@@ -2,6 +2,8 @@
 
 A Web3 news portal that rewards users for reading and learning about cryptocurrency and blockchain technology. Clarity combines curated news with gamified learning through quizzes, allowing users to earn crypto tokens while staying informed about the latest trends in Web3, DeFi, and NFTs.
 
+> **Note**: This is a practice project for learning Web3 development basics and is considered a "web2.5" project. Clarity is NOT a real cryptocurrency project, and the CLARITY token is not an actual coin or valid legal tender. This is purely educational.
+
 ## What is Clarity?
 
 Clarity is a read-to-earn platform that transforms how people consume Web3 news. Instead of just scrolling through content, users read articles, verify their knowledge through quick quizzes, and earn CLARITY tokens as rewards. The platform combines AI-powered news verification, transparent bias analysis, and community-driven content curation to combat misinformation during global crises.
@@ -48,12 +50,18 @@ cd clarity
 pnpm install
 ```
 
-3. Run the development server:
+3. Set up environment variables:
+```bash
+cp .env.example .env
+```
+Then fill in the required values in `.env`
+
+4. Run the development server:
 ```bash
 pnpm dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ### Available Scripts
 
@@ -71,4 +79,4 @@ pnpm dev
 
 ## License
 
-Copyright 2025 Clarity. All rights reserved.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
