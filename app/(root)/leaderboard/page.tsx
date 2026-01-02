@@ -76,7 +76,7 @@ export default function LeaderboardPage() {
             </p>
           </header>
 
-          <Card className="border-border bg-card backdrop-blur-sm">
+          <Card className="rounded-none border border-border bg-card">
             <CardHeader>
               <CardTitle>Global Rankings</CardTitle>
               <CardDescription>

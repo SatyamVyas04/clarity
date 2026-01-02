@@ -273,32 +273,6 @@ function QuizContent({ slug }: QuizContentProps) {
               </CardContent>
             </Card>
 
-            {attemptResult && (
-              <Card className="rounded-none border border-emerald-500/60 bg-emerald-50 shadow-sm dark:bg-emerald-950/20">
-                <CardHeader className="space-y-2 pb-2">
-                  <CardTitle className="text-emerald-700 dark:text-emerald-400">
-                    Score {attemptResult.attempt.score}/
-                    {attemptResult.attempt.totalQuestions}
-                  </CardTitle>
-                  <CardDescription className="text-emerald-600/80 dark:text-emerald-400/70">
-                    Session reward +{attemptResult.attempt.coinsAwarded} •
-                    Lifetime coins {attemptResult.profile.totalCoins}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-wrap gap-3 text-sm">
-                  <Badge className="bg-emerald-600 text-emerald-50 dark:bg-emerald-700">
-                    Total quizzes {attemptResult.profile.totalQuizzes}
-                  </Badge>
-                  <Badge className="bg-emerald-600 text-emerald-50 dark:bg-emerald-700">
-                    Latest attempt{" "}
-                    {new Date(
-                      attemptResult.attempt.completedAt
-                    ).toLocaleDateString()}
-                  </Badge>
-                </CardContent>
-              </Card>
-            )}
-
             <div className="space-y-4">
               {quizData.questions.map((question, index) => {
                 const result = resultMap.get(question.id);
@@ -378,6 +352,32 @@ function QuizContent({ slug }: QuizContentProps) {
                 );
               })}
             </div>
+
+            {attemptResult && (
+              <Card className="rounded-none border border-emerald-500/60 bg-emerald-50 shadow-sm dark:bg-emerald-950/20">
+                <CardHeader className="space-y-2 pb-2">
+                  <CardTitle className="text-emerald-700 dark:text-emerald-400">
+                    Score {attemptResult.attempt.score}/
+                    {attemptResult.attempt.totalQuestions}
+                  </CardTitle>
+                  <CardDescription className="text-emerald-600/80 dark:text-emerald-400/70">
+                    Session reward +{attemptResult.attempt.coinsAwarded} •
+                    Lifetime coins {attemptResult.profile.totalCoins}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-wrap gap-3 text-sm">
+                  <Badge className="bg-emerald-600 text-emerald-50 dark:bg-emerald-700">
+                    Total quizzes {attemptResult.profile.totalQuizzes}
+                  </Badge>
+                  <Badge className="bg-emerald-600 text-emerald-50 dark:bg-emerald-700">
+                    Latest attempt{" "}
+                    {new Date(
+                      attemptResult.attempt.completedAt
+                    ).toLocaleDateString()}
+                  </Badge>
+                </CardContent>
+              </Card>
+            )}
 
             <Card className="rounded-none border border-border shadow-sm">
               <CardContent className="space-y-4 p-6">

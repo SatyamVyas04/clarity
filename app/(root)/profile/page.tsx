@@ -78,8 +78,8 @@ function ProfileContent() {
 
   return (
     <main className="relative z-10 mx-auto h-screen w-full max-w-4xl overflow-scroll border bg-background pb-16">
-      <div className="container mx-auto flex max-w-4xl flex-col p-6 md:p-10">
-        <header className="mb-12 space-y-4">
+      <div className="container mx-auto flex max-w-4xl flex-col gap-6 p-6 md:p-10">
+        <header className="mb-6 space-y-4">
           <h1 className="font-bold text-4xl md:text-5xl">Your Profile</h1>
           <p className="text-lg text-muted-foreground md:text-xl">
             Manage your wallet and account settings

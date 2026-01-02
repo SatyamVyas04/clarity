@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import CountUp from "@/components/bits/CountUp";
 import Dither from "@/components/bits/dither";
 import GlareHover from "@/components/bits/GlareHover";
@@ -26,17 +27,26 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ModeToggle } from "@/components/ui/mode-toggle";
+import { useAuth } from "@/lib/use-auth";
 
 export default function LandingPage() {
-  const { connect, isConnected, loading, error } = useWeb3AuthConnect();
+  const { connect, loading, error } = useWeb3AuthConnect();
+  const { isAuthenticated, isInitializing } = useAuth();
   const router = useRouter();
+
+  // Redirect to feed if already authenticated (after initialization)
+  useEffect(() => {
+    if (!isInitializing && isAuthenticated) {
+      router.replace("/feed");
+    }
+  }, [isAuthenticated, isInitializing, router]);
 
   const handleConnect = async () => {
     if (loading) {
       return;
     }
     // If already connected, navigate to feed
-    if (isConnected) {
+    if (isAuthenticated) {
       router.push("/feed");
       return;
     }
@@ -52,7 +62,7 @@ export default function LandingPage() {
   let headerLabel = "Connect Wallet";
   if (loading) {
     headerLabel = "Connecting...";
-  } else if (isConnected) {
+  } else if (isAuthenticated) {
     headerLabel = "Go to Feed";
   }
 

@@ -17,9 +17,9 @@ const submissionSchema = z.object({
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
-  const { slug } = params;
+  const { slug } = await params;
 
   if (!slug) {
     return NextResponse.json(
@@ -31,7 +31,7 @@ export async function POST(
   let payload: z.infer<typeof submissionSchema>;
   try {
     payload = submissionSchema.parse(await request.json());
-  } catch (parseError) {
+  } catch (_parseError) {
     return NextResponse.json(
       { error: "Invalid submission payload" },
       { status: 400 }

@@ -18,6 +18,7 @@ type CryptoNewsApiArticle = {
   pubDate: string | null;
   source_name: string | null;
   coin: string[] | null;
+  category?: string[] | null;
 };
 
 type CryptoNewsApiResponse = {
@@ -31,7 +32,93 @@ const DEFAULT_PARAMS: Record<string, string> = {
   timezone: "asia/kolkata",
   image: "1",
   removeduplicate: "1",
+  prioritydomain: "top",
 };
+
+const TRUSTED_SOURCES = new Set([
+  "coindesk",
+  "cointelegraph",
+  "decrypt",
+  "theblock",
+  "bitcoinmagazine",
+  "bloomberg",
+  "reuters",
+  "forbes",
+  "cnbc",
+  "cryptonews",
+  "u.today",
+  "ambcrypto",
+  "newsbtc",
+  "beincrypto",
+  "coingape",
+  "cryptopotato",
+  "dailyhodl",
+  "bitcoinist",
+  "cryptobriefing",
+  "blockworks",
+]);
+
+const SPAM_KEYWORDS = [
+  "airdrop",
+  "giveaway",
+  "free tokens",
+  "presale",
+  "bonus",
+  "limited time",
+  "act now",
+  "guaranteed returns",
+  "get rich",
+  "double your",
+  "pump",
+  "moon",
+  "100x",
+  "1000x",
+  "signal group",
+  "join now",
+  "exclusive offer",
+  "casino",
+  "gambling",
+];
+
+function isSpamArticle(article: CryptoNewsApiArticle): boolean {
+  const titleLower = (article.title ?? "").toLowerCase();
+  const descLower = (article.description ?? "").toLowerCase();
+  const combinedText = `${titleLower} ${descLower}`;
+
+  for (const keyword of SPAM_KEYWORDS) {
+    if (combinedText.includes(keyword)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function isQualityArticle(article: CryptoNewsApiArticle): boolean {
+  if (!article.title || article.title.length < 20) {
+    return false;
+  }
+
+  if (!article.description || article.description.length < 50) {
+    return false;
+  }
+
+  if (isSpamArticle(article)) {
+    return false;
+  }
+
+  const sourceName = (article.source_name ?? "")
+    .toLowerCase()
+    .replace(/\s+/g, "");
+  if (TRUSTED_SOURCES.has(sourceName)) {
+    return true;
+  }
+
+  const hasRelevantCoins = article.coin && article.coin.length > 0;
+  const hasGoodLength = article.description.length >= 100;
+
+  return hasRelevantCoins || hasGoodLength;
+}
 
 const newsApiKey = process.env.NEXT_PUBLIC_NEWSDATA_API_KEY as string;
 
@@ -60,7 +147,9 @@ export async function fetchCryptoNews(): Promise<CryptoNewsArticle[]> {
     throw new Error("News API returned unsuccessful status");
   }
 
-  return (data.results ?? []).map((article) => ({
+  const qualityArticles = (data.results ?? []).filter(isQualityArticle);
+
+  return qualityArticles.map((article) => ({
     article_id: article.article_id,
     title: article.title,
     description: article.description,

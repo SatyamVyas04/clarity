@@ -59,8 +59,8 @@ function FeedContent() {
           {isNewsLoading && (
             <div className="grid gap-6 md:grid-cols-2">
               {SKELETON_KEYS.map((key) => (
-                <Card className="animate-pulse" key={key}>
-                  <div className="h-40 rounded-t-lg bg-muted" />
+                <Card className="animate-pulse rounded-none" key={key}>
+                  <div className="h-40 bg-muted" />
                   <CardContent className="space-y-3 py-4">
                     <div className="h-4 w-3/4 rounded bg-muted" />
                     <div className="h-3 w-full rounded bg-muted" />
@@ -72,7 +72,7 @@ function FeedContent() {
           )}
 
           {newsError && (
-            <Card>
+            <Card className="rounded-none border border-border">
               <CardContent className="py-6">
                 <p className="text-destructive">
                   Failed to load news. Please try again shortly.
@@ -85,12 +85,12 @@ function FeedContent() {
             <div className="grid gap-6 md:grid-cols-2">
               {(articles ?? []).slice(0, 10).map((article) => (
                 <Card
-                  className="flex h-full flex-col border-border pt-0"
+                  className="flex h-full flex-col rounded-none border border-border pt-0"
                   key={article.article_id}
                 >
                   {article.image_url ? (
                     <div
-                      className="h-50 w-full overflow-hidden rounded-t-lg bg-muted"
+                      className="h-50 w-full overflow-hidden bg-muted"
                       style={{
                         backgroundImage: `url(${article.image_url})`,
                         backgroundSize: "cover",
@@ -98,7 +98,7 @@ function FeedContent() {
                       }}
                     />
                   ) : (
-                    <div className="h-44 w-full rounded-t-lg bg-muted" />
+                    <div className="h-44 w-full bg-muted" />
                   )}
                   <CardHeader>
                     <CardTitle className="line-clamp-2 text-xl">

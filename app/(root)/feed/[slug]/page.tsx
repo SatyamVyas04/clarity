@@ -51,6 +51,35 @@ type EnhancedArticle = {
   };
 };
 
+type StoredArticleResponse = {
+  article: {
+    slug: string;
+    title: string;
+    description: string | null;
+    imageUrl: string | null;
+    sourceName: string | null;
+    sourceLink: string | null;
+    createdAt: string;
+  };
+  enhancement: {
+    summary: string;
+    keyTakeaways: string[];
+    sections: Array<{ heading: string; paragraphs: string[] }>;
+    sources: Array<{ id: string; title: string; url: string }>;
+    quizCallToAction: string | null;
+  } | null;
+};
+
+async function fetchStoredArticle(
+  slug: string
+): Promise<StoredArticleResponse | null> {
+  const response = await fetch(`/api/article/${slug}`);
+  if (!response.ok) {
+    return null;
+  }
+  return (await response.json()) as StoredArticleResponse;
+}
+
 const INLINE_CITATION_PATTERN = /(\[\[(.*?)\]\])/g;
 const INLINE_CITATION_EXTRACT = /^\[\[(.*?)\]\]$/;
 
@@ -89,14 +118,48 @@ export default function ArticlePage({ params }: ArticlePageProps) {
 }
 
 function ArticleContent({ slug }: { slug: string }) {
-  const { data: articles } = useQuery<CryptoNewsArticle[]>({
+  const { data: articles, isLoading: isNewsLoading } = useQuery<
+    CryptoNewsArticle[]
+  >({
     queryKey: ["crypto-news"],
     queryFn: fetchCryptoNews,
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 15,
   });
 
-  const article = articles?.find((a) => a.article_id === slug);
+  const articleFromFeed = articles?.find((a) => a.article_id === slug);
+
+  const shouldFetchStored = articleFromFeed === undefined && !isNewsLoading;
+
+  const { data: storedArticle, isLoading: isStoredLoading } =
+    useQuery<StoredArticleResponse | null>({
+      queryKey: ["stored-article", slug],
+      queryFn: () => fetchStoredArticle(slug),
+      enabled: shouldFetchStored,
+      staleTime: 1000 * 60 * 30,
+      gcTime: 1000 * 60 * 60,
+    });
+
+  const article: CryptoNewsArticle | null = useMemo(() => {
+    if (articleFromFeed) {
+      return articleFromFeed;
+    }
+    if (storedArticle?.article) {
+      return {
+        article_id: storedArticle.article.slug,
+        title: storedArticle.article.title,
+        description: storedArticle.article.description,
+        link: storedArticle.article.sourceLink ?? "",
+        image_url: storedArticle.article.imageUrl,
+        pubDate: storedArticle.article.createdAt,
+        source_name: storedArticle.article.sourceName,
+        coin: null,
+      };
+    }
+    return null;
+  }, [articleFromFeed, storedArticle]);
+
+  const isFromStorage = !articleFromFeed && storedArticle !== null;
 
   const {
     data: enhancedContent,
@@ -105,6 +168,20 @@ function ArticleContent({ slug }: { slug: string }) {
   } = useQuery<EnhancedArticle>({
     queryKey: ["enhanced-article", slug],
     queryFn: async () => {
+      if (isFromStorage && storedArticle?.enhancement) {
+        return {
+          summary: storedArticle.enhancement.summary,
+          keyTakeaways: storedArticle.enhancement.keyTakeaways,
+          sections: storedArticle.enhancement.sections,
+          sources: storedArticle.enhancement.sources,
+          quiz: {
+            callToAction:
+              storedArticle.enhancement.quizCallToAction ??
+              "Test your clarity with a quick quiz.",
+            questions: [],
+          },
+        };
+      }
       if (!article) {
         throw new Error("Article is unavailable");
       }
@@ -146,6 +223,29 @@ function ArticleContent({ slug }: { slug: string }) {
     );
   };
 
+  const isLoadingArticle =
+    isNewsLoading || (shouldFetchStored && isStoredLoading);
+
+  if (isLoadingArticle) {
+    return (
+      <main className="relative z-10 mx-auto h-screen w-full max-w-4xl overflow-scroll border bg-background pb-16">
+        <div className="container mx-auto p-6 md:p-10">
+          <Card>
+            <CardContent className="space-y-3 py-10">
+              <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
+              <div className="h-3 w-2/3 animate-pulse rounded bg-muted" />
+              <div className="h-3 w-1/2 animate-pulse rounded bg-muted" />
+              <p className="text-center text-muted-foreground text-sm">
+                Loading article...
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+        <BottomDock />
+      </main>
+    );
+  }
+
   if (!article) {
     return (
       <main className="relative z-10 mx-auto h-screen w-full max-w-4xl overflow-scroll border bg-background pb-16">
@@ -179,7 +279,7 @@ function ArticleContent({ slug }: { slug: string }) {
         <article className="space-y-8">
           {article.image_url && (
             <div
-              className="h-64 w-full overflow-hidden rounded-3xl border border-primary bg-secondary shadow-lg md:h-80"
+              className="h-64 w-full overflow-hidden border border-primary bg-secondary shadow-lg md:h-80"
               style={{
                 backgroundImage: `url(${article.image_url})`,
                 backgroundSize: "cover",
@@ -215,7 +315,7 @@ function ArticleContent({ slug }: { slug: string }) {
           </header>
 
           {isEnhancing && (
-            <Card className="border border-primary bg-secondary">
+            <Card className="rounded-none border border-primary bg-secondary">
               <CardContent className="space-y-3 py-6">
                 <div className="h-3 w-full animate-pulse rounded bg-muted" />
                 <div className="h-3 w-5/6 animate-pulse rounded bg-muted" />
@@ -230,7 +330,7 @@ function ArticleContent({ slug }: { slug: string }) {
           )}
 
           {enhanceError && (
-            <Card className="border border-destructive">
+            <Card className="rounded-none border border-destructive">
               <CardHeader>
                 <CardTitle className="text-destructive">
                   AI briefing unavailable
@@ -247,7 +347,7 @@ function ArticleContent({ slug }: { slug: string }) {
 
           {enhancedContent && !isEnhancing && (
             <div className="space-y-8">
-              <Card className="border border-primary bg-primary text-primary-foreground shadow-lg">
+              <Card className="rounded-none border border-primary bg-primary text-primary-foreground shadow-lg">
                 <CardHeader>
                   <CardTitle>Executive Summary</CardTitle>
                   <CardDescription className="text-primary-foreground">
@@ -259,7 +359,7 @@ function ArticleContent({ slug }: { slug: string }) {
                 </CardContent>
               </Card>
 
-              <Card className="border border-secondary bg-secondary">
+              <Card className="rounded-none border border-secondary bg-secondary">
                 <CardHeader>
                   <CardTitle>Key Takeaways</CardTitle>
                   <CardDescription>
@@ -270,7 +370,7 @@ function ArticleContent({ slug }: { slug: string }) {
                   <div className="grid gap-4 md:grid-cols-2">
                     {enhancedContent.keyTakeaways.map((takeaway) => (
                       <div
-                        className="flex items-start gap-3 rounded-xl border border-accent bg-accent p-4 text-accent-foreground"
+                        className="flex items-start gap-3 border border-accent bg-accent p-4 text-accent-foreground"
                         key={takeaway}
                       >
                         <p className="text-sm">{takeaway}</p>
@@ -282,7 +382,7 @@ function ArticleContent({ slug }: { slug: string }) {
 
               {enhancedContent.sections.map((section) => (
                 <Card
-                  className="border border-secondary bg-secondary shadow-sm"
+                  className="rounded-none border border-secondary bg-secondary shadow-sm"
                   key={section.heading}
                 >
                   <CardHeader>
@@ -298,7 +398,7 @@ function ArticleContent({ slug }: { slug: string }) {
                 </Card>
               ))}
 
-              <Card className="border border-secondary bg-secondary">
+              <Card className="rounded-none border border-secondary bg-secondary">
                 <CardHeader>
                   <CardTitle>Sources</CardTitle>
                   <CardDescription>
@@ -309,7 +409,7 @@ function ArticleContent({ slug }: { slug: string }) {
                   <ol className="space-y-3">
                     {enhancedContent.sources.map((source, index) => (
                       <li
-                        className="flex items-start justify-between gap-4 rounded-xl border border-accent bg-accent p-4 text-accent-foreground"
+                        className="flex items-start justify-between gap-4 border border-accent bg-accent p-4 text-accent-foreground"
                         id={toDomId(source.id)}
                         key={source.id}
                       >
@@ -335,7 +435,7 @@ function ArticleContent({ slug }: { slug: string }) {
               </Card>
 
               {enhancedContent.quiz && (
-                <Card className="border border-primary bg-primary/10">
+                <Card className="rounded-none border border-primary bg-primary/10">
                   <CardHeader>
                     <CardTitle>Test Your Clarity</CardTitle>
                     <CardDescription>
