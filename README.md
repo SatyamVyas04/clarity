@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Clarity
+
+A Web3 news portal that rewards users for reading and learning about cryptocurrency and blockchain technology. Clarity combines curated news with gamified learning through quizzes, allowing users to earn crypto tokens while staying informed about the latest trends in Web3, DeFi, and NFTs.
+
+> **Note**: This is a practice project for learning Web3 development basics and is considered a "web2.5" project. Clarity is NOT a real cryptocurrency project, and the CLARITY token is not an actual coin or valid legal tender. This is purely educational.
+
+## What is Clarity?
+
+Clarity is a read-to-earn platform that transforms how people consume Web3 news. Instead of just scrolling through content, users read articles, verify their knowledge through quick quizzes, and earn CLARITY tokens as rewards. The platform combines AI-powered news verification, transparent bias analysis, and community-driven content curation to combat misinformation during global crises.
+
+## Key Features
+
+- **Read to Earn**: Complete articles and take quizzes to earn CLARITY tokens instantly
+- **Curated Web3 News**: Get the latest updates on DeFi trends, NFT mints, and blockchain developments
+- **Gamified Learning**: Level up your profile, earn badges, and compete on leaderboards
+- **AI-Powered Verification**: Community and AI verify projects to protect against scams
+- **NFT Achievements**: Mint exclusive soulbound tokens for completing learning tracks
+- **DAO Governance**: Use earned tokens to vote on news coverage and treasury management
+- **Launchpad Access**: Top learners get early whitelist access to vetted projects and airdrops
+- **Reward Multipliers**: Premium membership offers 2x rewards and exclusive benefits
+
+## Tech Stack
+
+- **Framework**: Next.js 15 with React 19
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **Web3**: wagmi, viem, Web3Auth for wallet integration
+- **AI**: Perplexity AI SDK for content generation and verification
+- **Database**: Neon (PostgreSQL)
+- **3D Graphics**: Three.js with React Three Fiber
+- **State Management**: TanStack Query
+- **Code Quality**: Biome with Ultracite preset
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 20 or higher
+- pnpm package manager
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/SatyamVyas04/clarity.git
+cd clarity
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+pnpm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up environment variables:
+```bash
+cp .env.example .env
+```
+Then fill in the required values in `.env`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+4. Run the development server:
+```bash
+pnpm dev
+```
 
-## Learn More
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-To learn more about Next.js, take a look at the following resources:
+### Available Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `pnpm dev` - Start the development server with Turbopack
+- `pnpm build` - Build the production application
+- `pnpm start` - Start the production server
+- `pnpm lint` - Run ESLint checks
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+- `/app` - Next.js app directory with pages and API routes
+- `/components` - Reusable React components (UI, navigation, auth, web3)
+- `/lib` - Utility functions and hooks
+- `/public` - Static assets
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
