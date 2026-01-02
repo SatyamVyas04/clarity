@@ -120,13 +120,13 @@ function isQualityArticle(article: CryptoNewsApiArticle): boolean {
   return hasRelevantCoins || hasGoodLength;
 }
 
-const newsApiKey = process.env.NEXT_PUBLIC_NEWSDATA_API_KEY as string;
+const newsApiKey = process.env.NEWSDATA_API_KEY as string;
 
 export async function fetchCryptoNews(): Promise<CryptoNewsArticle[]> {
   const apiKey = newsApiKey?.trim();
   if (!apiKey) {
     throw new Error(
-      "Missing NEXT_PUBLIC_NEWSDATA_API_KEY environment variable"
+      "Missing NEWSDATA_API_KEY environment variable"
     );
   }
 
