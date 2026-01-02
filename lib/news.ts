@@ -1,3 +1,4 @@
+"use server";
 export type CryptoNewsArticle = {
   article_id: string;
   title: string;
@@ -125,9 +126,7 @@ const newsApiKey = process.env.NEWSDATA_API_KEY as string;
 export async function fetchCryptoNews(): Promise<CryptoNewsArticle[]> {
   const apiKey = newsApiKey?.trim();
   if (!apiKey) {
-    throw new Error(
-      "Missing NEWSDATA_API_KEY environment variable"
-    );
+    throw new Error("Missing NEWSDATA_API_KEY environment variable");
   }
 
   const searchParams = new URLSearchParams({

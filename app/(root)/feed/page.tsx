@@ -76,6 +76,8 @@ function FeedContent() {
               <CardContent className="py-6">
                 <p className="text-destructive">
                   Failed to load news. Please try again shortly.
+                  <br />
+                  Error: {(newsError as Error).message}
                 </p>
               </CardContent>
             </Card>
