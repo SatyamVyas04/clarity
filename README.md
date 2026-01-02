@@ -1,5 +1,7 @@
 # Clarity
 
+https://github.com/user-attachments/assets/cdedc357-7101-47a0-bb37-1ace3be7fc37
+
 A Web3 news portal that rewards users for reading and learning about cryptocurrency and blockchain technology. Clarity combines curated news with gamified learning through quizzes, allowing users to earn crypto tokens while staying informed about the latest trends in Web3, DeFi, and NFTs.
 
 > **Note**: This is a practice project for learning Web3 development basics and is considered a "web2.5" project. Clarity is NOT a real cryptocurrency project, and the CLARITY token is not an actual coin or valid legal tender. This is purely educational.
